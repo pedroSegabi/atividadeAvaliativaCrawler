@@ -21,7 +21,6 @@ def bfs_caminho(grafo, origem, destino):
 def main():
     import sys
     grafo, _ = carregar_grafo()
-    # transformar o grafo em não-direcionado para considerar conexões em ambas as direções
     undir = {u: set(vs) for u, vs in grafo.items()}
     for u, vs in grafo.items():
         for v in vs:
@@ -30,7 +29,6 @@ def main():
     nomes = sorted(grafo.keys())
     total = len(nomes)
 
-    # utilitário: BFS a partir de uma fonte (retorna mapa parent para reconstruir caminhos)
     def bfs_from_source(g, src):
         from collections import deque
         q = deque([src])
@@ -43,11 +41,10 @@ def main():
                     q.append(v)
         return parent
 
-    # opção: calcular o par com maior menor-caminho (--longest)
     if '--longest' in sys.argv:
         print('Calculando par com maior menor-caminho ("--longest")... isso pode demorar alguns segundos')
         norm = lambda s: ''.join(ch for ch in s if ch.isalnum()).lower()
-        best = (-1, None, None, None)  # (grau, src, dst, path)
+        best = (-1, None, None, None)
         for i, a in enumerate(nomes):
             parent = bfs_from_source(grafo, a)
             for b in nomes:
@@ -55,7 +52,6 @@ def main():
                     continue
                 if b not in parent:
                     continue
-                # reconstruir caminho
                 path = []
                 cur = b
                 while cur is not None:
@@ -78,8 +74,6 @@ def main():
             print('Nenhum par conectado encontrado.')
         return
 
-    # Se o usuário passou dois argumentos posicionais, tratamos como dois nomes
-    # (ex: python3 buscar_conexao.py "Nome A" "Nome B") e retornamos a distância entre eles.
     if len(sys.argv) >= 3:
         nome1 = sanitize_title(sys.argv[1])
         nome2 = sanitize_title(sys.argv[2])
@@ -93,7 +87,6 @@ def main():
             print(f"❌ Não foi encontrado caminho entre '{sys.argv[1]}' e '{sys.argv[2]}'.")
         return
 
-    # Caso contrário, comportamento antigo: procurar primeiro par com grau >= min_degree
     min_degree = 2
     if len(sys.argv) == 2:
         try:
@@ -111,7 +104,6 @@ def main():
             if not caminho:
                 continue
             grau = len(caminho) - 1
-            # pular conexões triviais que são variantes do mesmo nome
             if grau == 1 and norm(caminho[0]) == norm(caminho[1]):
                 continue
             if grau >= min_degree:
