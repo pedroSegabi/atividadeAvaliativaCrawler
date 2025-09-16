@@ -75,4 +75,3 @@ Observação: no estado atual, `buscar_conexao.py` converte o grafo para NÃO-DI
 - Erro `ModuleNotFoundError: No module named 'bs4'` — ative o virtualenv e instale dependências (`pip install -r requirements.txt`).
 
 ---
-Se quiser, eu adiciono uma flag `--directed/--undirected` em `buscar_conexao.py` ou atualizo `utils.carregar_grafo()` para filtrar automaticamente páginas de categoria.
